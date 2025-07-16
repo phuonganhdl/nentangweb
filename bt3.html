@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Bài Tập 03</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    h3 {
+      background-color: #cceeff;
+      padding: 5px;
+      display: inline-block;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      text-align: center;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 5px 10px;
+    }
+    th {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+
+<table>
+  <!-- Dòng 1 -->
+  <tr>
+    <th rowspan="2" colspan="2">Student</th>
+    <th colspan="4">Exam</th>
+    <th colspan="4">2nd Exam</th>
+    <th rowspan="2" colspan="2">Final Grade</th>
+  </tr>
+
+  <!-- Dòng 2: Q1 Q2 Q3 + gộp ô Grade -->
+  <tr>
+    <th>Q1</th>
+    <th>Q2</th>
+    <th>Q3</th>
+    <th rowspan="2">Grade</th>
+    <th>Q1</th>
+    <th>Q2</th>
+    <th>Q3</th>
+    <th rowspan="2">Grade</th>
+  </tr>
+
+  <!-- Dòng 3: Code, Name, điểm mẫu -->
+  <tr>
+    <th>Code</th>
+    <th>Name</th>
+    <td>8</td>
+    <td>7</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <th>NR</th>
+    <th>R</th>
+  </tr>
+
+  <!-- John -->
+  <tr>
+    <td>80549061</td>
+    <td>John</td>
+    <td>70%</td>
+    <td>100%</td>
+    <td>100%</td>
+    <td>17.6</td>
+    <td colspan="4"></td> <!-- Gộp toàn bộ 2nd Exam thành 1 ô rỗng -->
+    <td>17.6</td>
+    <td>18</td>
+  </tr>
+
+  <!-- Mary -->
+  <tr>
+    <td>80549062</td>
+    <td>Mary</td>
+    <td>10%</td>
+    <td>50%</td>
+    <td>50%</td>
+    <td>6.8</td>
+    <td>100%</td>
+    <td>100%</td>
+    <td>50%</td>
+    <td>16.5</td>
+    <td>16.5</td>
+    <td>17</td>
+  </tr>
+
+  <!-- Claire -->
+  <tr>
+    <td>80549063</td>
+    <td>Claire</td>
+    <td colspan="4"></td> <!-- Gộp toàn bộ Exam thành 1 ô rỗng -->
+    <td>50%</td>
+    <td>50%</td>
+    <td>50%</td>
+    <td>10.0</td>
+    <td>10.0</td>
+    <td>10</td>
+  </tr>
+</table>
+
+</body>
+</html>
