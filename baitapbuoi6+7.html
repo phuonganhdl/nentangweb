@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quản lý sinh viên</title>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f7f8;
+    }
+    .navbar {
+      background-color: #2562e8;
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    header {
+      background-color: #74aceb;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .container {
+      display: flex;
+      gap: 20px;
+      padding: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-card {
+      flex: 1;
+      min-width: 300px;
+      max-width: 400px;
+    }
+
+    .form-card h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #555;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .gender-group {
+      margin-bottom: 15px;
+    }
+
+    .gender-group label {
+      margin-right: 15px;
+      font-weight: normal;
+    }
+
+    button {
+      background-color: #4A90E2;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2b6cb0;
+      transform: scale(1.08);
+      box-shadow: 0 0 12px rgba(43, 108, 176, 0.5);
+    }
+
+    .table-card {
+      flex: 2;
+      min-width: 300px;
+    }
+
+    .table-card h2 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    th,
+    td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #4A90E2;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      margin: 2px;
+      cursor: pointer;
+      transition: all 0.1s ease;
+    }
+
+    .btn-edit {
+      background-color: #ffc107;
+      color: #333;
+    }
+
+    .btn-edit:hover {
+      background-color: #ffae00;
+      color: white;
+      transform: scale(1.08);
+      box-shadow: 0 0 12px rgba(255, 174, 0, 0.5);
+    }
+
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background-color: #b71c1c;
+      transform: scale(1.08);
+      box-shadow: 0 0 12px rgba(183, 28, 28, 0.5);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #d4edda;
+      color: #155724;
+      padding: 12px 20px;
+      border: 1px solid #c3e6cb;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      font-weight: 500;
+      font-size: 16px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      z-index: 9999;
+    }
+
+    .toast i {
+      font-size: 18px;
+    }
+
+    .toast.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-color: #f5c6cb;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="toast" class="toast">
+    <i class="fas fa-check-square"></i>
+    <span id="toast-text">Thêm sinh viên thành công!</span>
+  </div>
+
+  <nav class="navbar">Quản lý sinh viên</nav>
+
+  <div class="container">
+    <div class="card form-card">
+      <h2 style="text-align: center;">Form Thêm sinh viên</h2>
+      <form id="studentForm">
+        <label for="maSV">Mã sinh viên:</label>
+        <input type="text" id="maSV" name="maSV" />
+
+        <label for="hoTen">Họ và tên:</label>
+        <input type="text" id="hoTen" name="hoTen" />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" />
+
+        <label for="ngaySinh">Ngày sinh:</label>
+        <input type="date" id="ngaySinh" name="ngaySinh" />
+
+        <label>Giới tính:</label>
+        <div class="gender-group" style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px;">
+          <label><input type="radio" name="gioiTinh" value="Nam" /> Nam</label>
+          <label><input type="radio" name="gioiTinh" value="Nữ" /> Nữ</label>
+        </div>
+
+        <label for="ghiChu">Ghi chú:</label>
+        <textarea id="ghiChu" name="ghiChu" rows="3"></textarea>
+
+        <div class="button-center">
+          <button type="submit" id="btnSubmit">Thêm sinh viên</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card table-card">
+      <h2 style="text-align: center;">Danh sách sinh viên</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Mã SV</th>
+            <th>Họ tên</th>
+            <th>Email</th>
+            <th>Giới tính</th>
+            <th>Ngày sinh</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody id="studentTable">
+          <tr>
+            <td>1</td>
+            <td>2251161938</td>
+            <td>Lê Thị Phương Anh</td>
+            <td>phuonganh@gmail.com</td>
+            <td>Nữ</td>
+            <td>2004-02-09</td>
+            <td>
+              <button class="btn btn-edit">Sửa</button>
+              <button class="btn btn-delete">Xoá</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>2251161950</td>
+            <td>Lê Thị Trà My</td>
+            <td>tramy@gmail.com</td>
+            <td>Nữ</td>
+            <td>2002-01-01</td>
+            <td>
+              <button class="btn btn-edit">Sửa</button>
+              <button class="btn btn-delete">Xoá</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    let selectedRow = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("studentForm");
+      const tableBody = document.getElementById("studentTable");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const maSV = document.getElementById("maSV").value.trim();
+        const hoTen = document.getElementById("hoTen").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const ngaySinh = document.getElementById("ngaySinh").value;
+        const gioiTinh = document.querySelector("input[name='gioiTinh']:checked")?.value || "";
+        const ghiChu = document.getElementById("ghiChu").value.trim();
+
+        if (!maSV || !hoTen || !email || !gioiTinh) {
+          showToast("❌ Vui lòng điền đầy đủ thông tin!", true);
+          return;
+        }
+        const emailRegex = /^\S+@\S+\.\S+$/;
+        if (!emailRegex.test(email)) {
+          showToast("❌ Email không hợp lệ!", true);
+          return;
+        }
+        if (selectedRow == null) {
+         
+          const newRow = tableBody.insertRow();
+          newRow.insertCell().innerText = tableBody.rows.length;
+          newRow.insertCell().innerText = maSV;
+          newRow.insertCell().innerText = hoTen;
+          newRow.insertCell().innerText = email;
+          newRow.insertCell().innerText = gioiTinh;
+          newRow.insertCell().innerText = ngaySinh;
+          const cell = newRow.insertCell();
+          cell.innerHTML = `
+            <button class="btn btn-edit">Sửa</button>
+            <button class="btn btn-delete">Xoá</button>
+          `;
+          showToast("✅ Thêm sinh viên thành công!");
+        } else {
+          selectedRow.cells[1].innerText = maSV;
+          selectedRow.cells[2].innerText = hoTen;
+          selectedRow.cells[3].innerText = email;
+          selectedRow.cells[4].innerText = gioiTinh;
+          selectedRow.cells[5].innerText = ngaySinh;
+          showToast("✅ Cập nhật sinh viên thành công!");
+          selectedRow = null;
+          document.getElementById("btnSubmit").innerText = "Thêm sinh viên";
+        }
+
+        form.reset();
+      });
+
+      tableBody.addEventListener("click", function (e) {
+        const row = e.target.closest("tr");
+        if (e.target.classList.contains("btn-delete")) {
+          if (confirm("Bạn có chắc muốn xoá sinh viên này?")) {
+            row.remove();
+            updateSTT();
+            showToast("🗑️ Xoá thành công!");
+          }
+        }
+
+        if (e.target.classList.contains("btn-edit")) {
+          selectedRow = row;
+          document.getElementById("maSV").value = row.cells[1].innerText;
+          document.getElementById("hoTen").value = row.cells[2].innerText;
+          document.getElementById("email").value = row.cells[3].innerText;
+          document.getElementById("ngaySinh").value = row.cells[5].innerText;
+          const gt = row.cells[4].innerText;
+          document.querySelector(`input[name='gioiTinh'][value='${gt}']`).checked = true;
+          document.getElementById("btnSubmit").innerText = "Cập nhật";
+        }
+      });
+
+      function updateSTT() {
+        const rows = tableBody.querySelectorAll("tr");
+        rows.forEach((row, index) => {
+          row.cells[0].innerText = index + 1;
+        });
+      }
+
+      function showToast(message, isError = false) {
+        const toast = document.getElementById("toast");
+        const toastText = document.getElementById("toast-text");
+
+        toast.classList.remove("error");
+        if (isError) {
+          toast.innerHTML = `<i class="fas fa-exclamation-circle"></i> <span id="toast-text">${message}</span>`;
+        } else {
+          toast.innerHTML = `<i class="fas fa-check-square"></i> <span id="toast-text">${message}</span>`;
+        }
+
+        toast.style.display = "flex";
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 1000);
+      }
+    });
+  </script>
+</body>
+</html>
